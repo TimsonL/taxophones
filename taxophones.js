@@ -7,7 +7,8 @@ function init() {
 
     var myMap = new ymaps.Map('map', {
         center: [55.733835, 37.588227],
-        zoom: 5
+        zoom: 5,
+        controls: []
     }, {
         searchControlProvider: 'yandex#search'
     });
@@ -56,9 +57,9 @@ function init() {
         for (var i = 0; i < obj.length; i ++) {
             var mark = new ymaps.Placemark([Number(obj[i].Cells.Y.replace(',', '.')), Number(obj[i].Cells.X.replace(',', '.'))], {
                 balloonContentHeader: 'Таксофон, ' + obj[i].Cells.NAME,
-                balloonContentBody: obj[i].Cells.ADDRESS,
+                balloonContentBody: obj[i].Cells.ADDRESS
             }, {
-                iconColor: iconColor[obj[i].Cells.NAME],
+                iconColor: iconColor[obj[i].Cells.NAME] || 'lightBlue'
             });
             placemarks.push(mark);
             if (str.indexOf(obj[i].Cells.NAME) == -1) {
@@ -68,9 +69,6 @@ function init() {
         }
         clusterer.add(placemarks);
         myMap.geoObjects.add(clusterer);
-
-        console.log(nameArr);
-
         var legend = document.getElementById('legend');
         var temp = 10;
         for (var i = 0; i < nameArr.length; i ++) {
@@ -81,15 +79,10 @@ function init() {
             newItem.style.top += temp + 'px';
             newColorItem.style.top += temp + 'px';
             newItem.innerHTML = nameArr[i];
-            newColorItem.style.backgroundColor = iconColor[nameArr[i]];
+            newColorItem.style.backgroundColor = iconColor[nameArr[i]] || 'lightBlue';
             legend.appendChild(newItem);
             legend.appendChild(newColorItem);
             temp += 30;
-            // if (legend.style.height < newItem.style.top) {
-            //     legend.style.height += temp + 'px';
-            // }
         }
     });
-
-    
 }
